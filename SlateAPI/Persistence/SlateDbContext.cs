@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
+using SlateAPI.Entities;
 
-namespace SlateAPI.Models;
+namespace SlateAPI.Persistence;
 
 public partial class SlateDbContext : DbContext
 {

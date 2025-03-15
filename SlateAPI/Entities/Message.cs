@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace SlateAPI.Models;
+namespace SlateAPI.Entities;
 
 public partial class Message
 {
