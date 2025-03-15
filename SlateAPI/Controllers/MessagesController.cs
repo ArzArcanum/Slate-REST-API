@@ -40,36 +40,6 @@ namespace SlateAPI.Controllers
             return message;
         }
 
-        // PUT: /Messages/5
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutMessage(long id, Message message)
-        {
-            if (id != message.Id)
-            {
-                return BadRequest();
-            }
-
-            _context.Entry(message).State = EntityState.Modified;
-
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!MessageExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-
-            return NoContent();
-        }
-
         // POST: /Messages
         [HttpPost]
         public async Task<ActionResult<Message>> PostMessage(MessageRequestDTO messageDTO)
@@ -102,11 +72,6 @@ namespace SlateAPI.Controllers
             await _context.SaveChangesAsync();
 
             return NoContent();
-        }
-
-        private bool MessageExists(long id)
-        {
-            return _context.Messages.Any(e => e.Id == id);
         }
     }
 }
