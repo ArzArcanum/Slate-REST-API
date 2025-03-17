@@ -25,7 +25,9 @@ namespace SlateAPI.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Message>>> GetMessages()
         {
-            return await _context.Messages.ToListAsync();
+            return await _context.Messages
+                .Include(m => m.User)
+                .ToListAsync();
         }
 
         // GET: /Messages/5
@@ -48,10 +50,32 @@ namespace SlateAPI.Controllers
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
+            if (string.IsNullOrEmpty(userId))
+            {
+                return BadRequest("User ID is required.");
+            }
+
+            // Check if user exists
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.Id.Equals(userId));
+
+            // If user doesn't exist, create a new entry
+            if (user == null)
+            {
+                user = new User
+                {
+                    Id = userId,
+                    Username = userId
+                };
+
+                _context.Users.Add(user);
+            }
+
+            // Create new message entry
             var message = new Message
             {
-                UserId = userId,
-                Content = messageDTO.Content
+                Content = messageDTO.Content,
+                CreatedAt = DateTime.UtcNow,
+                User = user // Link to author user
             };
 
             _context.Messages.Add(message);

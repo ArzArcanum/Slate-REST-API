@@ -1,15 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
+﻿namespace SlateAPI.Entities;
 
-namespace SlateAPI.Entities;
-
-public partial class Message
+public class Message
 {
     public long Id { get; set; }
 
-    public string UserId { get; set; } = null!;
+    public required string Content { get; set; }
 
-    public string Content { get; set; } = null!;
+    public required DateTime CreatedAt { get; set; }
 
-    public DateTime? CreatedAt { get; set; }
+    public required User User { get; set; } // Navigation property
 }

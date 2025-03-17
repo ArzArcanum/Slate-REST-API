@@ -13,6 +13,10 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllers();
+    //.AddJsonOptions(opt =>
+    //{
+    //    opt.JsonSerializerOptions.ReferenceHandler = System.Text.Json.Serialization.ReferenceHandler.Preserve;
+    //});
 
 builder.Services.AddOpenApi();
 
@@ -45,9 +49,7 @@ builder.Services.AddCors(options =>
 });
 
 builder.Services.AddDbContext<SlateDbContext>(opt =>
-    opt.UseMySQL(
-        dbConnection
-    )
+    opt.UseSqlServer(dbConnection)
 );
 
 
