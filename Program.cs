@@ -4,20 +4,13 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using SlateAPI.Persistence;
 
 var AllowSameDomain = "_allowSameDomain";
-
 // Load env variables
 Env.Load();
 string dbConnection = Environment.GetEnvironmentVariable("DB_CONNECTION_STRING");
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
 builder.Services.AddControllers();
-    //.AddJsonOptions(opt =>
-    //{
-    //    opt.JsonSerializerOptions.ReferenceHandler = System.Text.Json.Serialization.ReferenceHandler.Preserve;
-    //});
-
 builder.Services.AddOpenApi();
 
 builder.Services.AddAuthentication(opt =>
@@ -48,10 +41,18 @@ builder.Services.AddCors(options =>
                       });
 });
 
-builder.Services.AddDbContext<SlateDbContext>(opt =>
-    opt.UseSqlServer(dbConnection)
-);
-
+if (builder.Environment.IsDevelopment())
+{
+    builder.Services.AddDbContext<SlateDbContext>(opt =>
+    opt.UseInMemoryDatabase("SlateDevDb")
+    );
+}
+else
+{
+    builder.Services.AddDbContext<SlateDbContext>(opt =>
+        opt.UseSqlServer(dbConnection)
+    );
+}
 
 builder.WebHost.UseUrls("https://localhost:7073");
 var app = builder.Build();
@@ -63,11 +64,7 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-
 app.UseCors(AllowSameDomain);
-
 app.UseAuthorization();
-
 app.MapControllers();
-
 app.Run();
