@@ -6,6 +6,8 @@ using System.Security.Claims;
 using SlateAPI.Persistence;
 using SlateAPI.Entities;
 using SlateAPI.DTOs;
+using System.IdentityModel.Tokens.Jwt;
+using Microsoft.Extensions.Primitives;
 
 namespace SlateAPI.Controllers
 {
@@ -48,23 +50,38 @@ namespace SlateAPI.Controllers
         [HttpPost]
         public async Task<ActionResult<Message>> PostMessage(MessageRequestDTO messageDTO)
         {
-            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-
-            if (string.IsNullOrEmpty(userId))
+            if (!Request.Headers.TryGetValue("ID-Token", out StringValues idTokenHeader))
             {
-                return BadRequest("User ID is required.");
+                return BadRequest("ID Token is required.");
             }
 
+            if (string.IsNullOrEmpty(idTokenHeader))
+            {
+                return BadRequest("ID Token is empty.");
+            }
+
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            Console.WriteLine(idTokenHeader);
+            var handler = new JwtSecurityTokenHandler();
+
+            var token = handler.ReadJwtToken(idTokenHeader);
+
+            var username = token?.Claims?.FirstOrDefault(c => c.Type == "nickname")?.Value;
+
+            Console.Write(username);
             // Check if user exists
             var user = await _context.Users.FirstOrDefaultAsync(u => u.Id.Equals(userId));
 
             // If user doesn't exist, create a new entry
             if (user == null)
             {
+                // Extract ID token
+
+
                 user = new User
                 {
                     Id = userId,
-                    Username = userId
+                    Username = username
                 };
 
                 _context.Users.Add(user);
