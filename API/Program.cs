@@ -1,7 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using DotNetEnv;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using SlateAPI.Persistence;
+using API.Persistence;
 
 var AllowSameDomain = "_allowSameDomain";
 // Load env variables

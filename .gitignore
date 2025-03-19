@@ -1,5 +1,6 @@
-Slate-API/.vs/
-Slate-API/bin/
-Slate-API/obj/
-Slate-API/.env
-Slate-API/Migrations/
+.vs
+Slate-REST-API.sln
+API/bin/
+API/obj/
+API/.env
+API/Migrations/

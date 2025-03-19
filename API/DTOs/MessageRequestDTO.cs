@@ -1,4 +1,4 @@
-﻿namespace SlateAPI.DTOs
+﻿namespace API.DTOs
 {
     public class MessageRequestDTO
     {

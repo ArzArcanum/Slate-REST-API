@@ -3,13 +3,13 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authorization;
 using System.Security.Claims;
-using SlateAPI.Persistence;
-using SlateAPI.Entities;
-using SlateAPI.DTOs;
+using API.Persistence;
+using API.Entities;
+using API.DTOs;
 using System.IdentityModel.Tokens.Jwt;
 using Microsoft.Extensions.Primitives;
 
-namespace SlateAPI.Controllers
+namespace API.Controllers
 {
     [Route("[controller]")]
     [ApiController]
