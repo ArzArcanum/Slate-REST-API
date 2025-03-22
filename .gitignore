@@ -4,3 +4,6 @@ API/bin/
 API/obj/
 API/.env
 API/Migrations/
+
+API.Tests/bin/
+API.Tests/obj/

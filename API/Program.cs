@@ -67,4 +67,8 @@ app.UseHttpsRedirection();
 app.UseCors(AllowSameDomain);
 app.UseAuthorization();
 app.MapControllers();
+
 app.Run();
+
+// Add this partial class so tests can reference Program
+public partial class Program { }
