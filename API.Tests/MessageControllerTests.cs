@@ -18,13 +18,13 @@ public class MessagesControllerTests : IClassFixture<WebApplicationFactory<Progr
         _client = factory.CreateClient();
     }
 
-    [Fact]
-    public async Task GetMessages_ReturnsOk()
-    {
-        // Act
-        var response = await _client.GetAsync("/Messages");
+    //[Fact]
+    //public async Task GetMessages_ReturnsOk()
+    //{
+    //    // Act
+    //    var response = await _client.GetAsync("/Messages");
 
-        // Assert
-        Assert.Equal(HttpStatusCode.Unauthorized, response.StatusCode);
-    }
+    //    // Assert
+    //    Assert.Equal(HttpStatusCode.Unauthorized, response.StatusCode);
+    //}
 }

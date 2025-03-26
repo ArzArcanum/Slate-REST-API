@@ -54,28 +54,25 @@ namespace API.Controllers
             {
                 return BadRequest("ID Token is required.");
             }
-
             if (string.IsNullOrEmpty(idTokenHeader))
             {
-                return BadRequest("ID Token is empty.");
+                return BadRequest("ID Token is invalid.");
             }
 
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            Console.WriteLine(idTokenHeader);
-            var handler = new JwtSecurityTokenHandler();
 
-            var token = handler.ReadJwtToken(idTokenHeader);
-
-            var username = token?.Claims?.FirstOrDefault(c => c.Type == "nickname")?.Value;
-
-            Console.Write(username);
             // Check if user exists
             var user = await _context.Users.FirstOrDefaultAsync(u => u.Id.Equals(userId));
 
             // If user doesn't exist, create a new entry
             if (user == null)
             {
+                var handler = new JwtSecurityTokenHandler();
+
                 // Extract ID token
+                var idToken = handler.ReadJwtToken(idTokenHeader);
+
+                var username = idToken.Claims?.FirstOrDefault(c => c.Type == "nickname")?.Value;
 
 
                 user = new User
@@ -92,6 +89,7 @@ namespace API.Controllers
             {
                 Content = messageDTO.Content,
                 CreatedAt = DateTime.UtcNow,
+                UserId = user.Id!,
                 User = user // Link to author user
             };
 

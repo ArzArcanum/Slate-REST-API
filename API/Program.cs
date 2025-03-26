@@ -4,9 +4,6 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using API.Persistence;
 
 var AllowSameDomain = "_allowSameDomain";
-// Load env variables
-Env.Load();
-string dbConnection = Environment.GetEnvironmentVariable("DB_CONNECTION_STRING");
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -43,12 +40,19 @@ builder.Services.AddCors(options =>
 
 if (builder.Environment.IsDevelopment())
 {
-    builder.Services.AddDbContext<SlateDbContext>(opt =>
-    opt.UseInMemoryDatabase("SlateDevDb")
+    Console.WriteLine("Dev mode");
+    builder.Services.AddDbContext<SlateDbContext>(opt => 
+        opt.UseInMemoryDatabase("SlateDevDb")
     );
 }
 else
 {
+    // Load DB_CONNECTION_STRING env variable 
+    Env.Load();
+    string? dbConnection = Environment.GetEnvironmentVariable("DB_CONNECTION_STRING")
+        ?? throw new InvalidOperationException("DB_CONNECTION_STRING is not set.");
+
+    Console.WriteLine("Prod mode");
     builder.Services.AddDbContext<SlateDbContext>(opt =>
         opt.UseSqlServer(dbConnection)
     );
@@ -56,6 +60,13 @@ else
 
 builder.WebHost.UseUrls("https://localhost:7073");
 var app = builder.Build();
+
+// Check and ensure database creation and seed data
+using (var scope = app.Services.CreateScope())
+{
+    var dbContext = scope.ServiceProvider.GetRequiredService<SlateDbContext>();
+    dbContext.Database.EnsureCreated();  // Ensures the in-memory database is created
+}
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())

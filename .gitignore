@@ -1,9 +1,11 @@
 .vs
 Slate-REST-API.sln
+
 API/bin/
 API/obj/
 API/.env
 API/Migrations/
+API/API.csproj.user
 
 API.Tests/bin/
 API.Tests/obj/

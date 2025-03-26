@@ -8,7 +8,9 @@
 
         public required DateTime CreatedAt { get; set; }
 
-        public required User User { get; set; } // Navigation property
+        public string UserId { get; set; }
+
+        public User User { get; set; }
     }
 
 }
