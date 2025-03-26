@@ -32,6 +32,7 @@ namespace API.Controllers
                 .ToListAsync();
         }
 
+
         // GET: /Messages/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Message>> GetMessage(long id)
